@@ -1,7 +1,10 @@
 {
   "private": true,
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "mongoose": "^4.10.8",
     "path": "^0.12.7"
   },
   "name": "7.3-todo-mvc-api",
