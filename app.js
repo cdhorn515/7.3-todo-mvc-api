@@ -37,14 +37,14 @@ app.post('/api/todos', function (req, res) {
     order: req.body.order,
     completed: req.body.completed
   });
-    todo.save();
+    Todos.save();
     res.json(Todos);
 });
 
 // GET /api/todos[/id] - get a specific todo item.
 app.get('/api/todos/:id', function(req, res) {
   var id = req.params.id;
-   Todos.find({_id: id}).then(function(tempTodo) {
+   Todos.findOne({_id: id}).then(function(tempTodo) {
     console.log(tempTodo);
     res.json(tempTodo);
   });
@@ -53,18 +53,35 @@ app.get('/api/todos/:id', function(req, res) {
 // PUT /api/todos[/id] - update a todo item. Returns the modified todo item.
 app.put('/api/todos/:id', function(req, res) {
   var id = req.params.id;
-  var todo = Todos.find({_id: id}).then(function(todoItem) {
-
+  var order = req.body.order;
+  var completed = req.body.completed;
+  var todo = Todos.findOne({_id: id}).then(function(result) {
+    console.log(result);
+    result.title = title;
+    result.order = order;
+    result.completed = completed;
+    console.log(result);
     res.json(todo);
-
   });
 });
 
 // PATCH /api/todos[/id] - partially update a todo item. Returns the modified todo item.
 app.patch('/api/todos/:id', function(req, res) {
   var id = req.params.id;
-  var todo = Todos.find({_id: id}).then(function(todoItem) {
-    return todoItem.id === id;
+  var title = req.body.title;
+  var order = req.body.order;
+  var completed = req.body.completed;
+  var todo = Todos.updateOne({_id: id}).then(function(todoItem) {
+    if (title){
+      result.title = title;
+    }
+    if (order){
+      result.order = order;
+    }
+    if (completed) {
+      result.completed = completed;
+    }
+    console.log('here', todoItem);
   });
   res.json(todo);
 });
@@ -72,19 +89,12 @@ app.patch('/api/todos/:id', function(req, res) {
 // DELETE /api/todos[/id] - deletes a todo item. Returns the todo item that was deleted.
 app.delete('/api/todos/:id', function(req, res) {
   var id = req.params.id;
-  var todo = Todos.find({_id: id}).then(function(todoItem) {
-    return todoItem.id === id;
-  });
-    res.json(todo);
-});
+  console.log("deleting?");
+  Todos.deleteOne({_id: id}).then(function(todoItem) {
+    res.json(todoItem);
 
-// const todo = new Todos({
-//   title: 'Finish Assessment'
-//   , order: 1
-//   , completed: false
-// });
-//
-// todo.save();
+  });
+});
 
 app.listen(3000, function () {
     console.log('Express running on http://localhost:3000/.');
